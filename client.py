@@ -22,6 +22,8 @@ class Client:
         self.name = simpledialog.askstring("Nickname", "")
         self.send(self.name)
         
+
+        # Start multithreaded processes
         GUIthread = threading.Thread(target=self.gui_handler)
         RECEIVEthread = threading.Thread(target=self.receive_handler)
         
