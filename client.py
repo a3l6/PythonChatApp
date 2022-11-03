@@ -1,6 +1,7 @@
 import socket
 import tkinter
 from tkinter import simpledialog
+import threading
 
 HEADER = 64
 PORT = 5050
@@ -12,7 +13,7 @@ FORMAT = "utf-8"
 class Client:
     def __init__ (self, host, port):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn.connect(ADDR)
+        self.conn.connect((host, port))
 
 
         self.root = tkinter.Tk()
@@ -20,14 +21,20 @@ class Client:
 
         self.name = simpledialog.askstring("Nickname", "")
         self.send(self.name)
-        self.send("!DISCONNECT")
         
-
-        label = tkinter.Label(self.root, text=self.name)
-        label.pack()
-
-        self.root.mainloop()
+        GUIthread = threading.Thread(target=self.gui_handler)
+        RECEIVEthread = threading.Thread(target=self.receive_handler)
         
+        GUIthread.start()
+        RECEIVEthread.start()
+
+    def gui_handler():
+        pass
+
+
+    def receive_handler():
+        pass
+
 
     def send(self, msg):
         message = msg.encode(FORMAT)    
