@@ -15,9 +15,9 @@ server.bind(ADDR)
 clients = []
 nicknames = []
 
-def broadcast(message):
+def broadcast(message: str):
     for client in clients:
-        client.send(message)
+        client.send(message.encode(FORMAT))
 
 def handle(client):
     while True:
@@ -62,10 +62,10 @@ def receive():
 
 def handle_conn(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected")
-    
+    nickname = None
     connected = True
     while connected:
-        print(f"Connected with {str(addr)}")
+        
 
         #   Get HEADER
         msg_length = conn.recv(HEADER).decode(FORMAT)
@@ -78,13 +78,17 @@ def handle_conn(conn, addr):
 
             if msg == DISCONNECT_MESSAGE:
                     connected = False
+                    #   Ugly code
+                    nicknames.pop(nickname.index(conn.recv(1024).decode(FORMAT)))
+                    clients.pop(clients.index(conn))
                     break
-            nickname = msg
-            nicknames.append(nickname)
-
-            clients.append(conn)
-
-            print(nicknames)
+            if nickname == None:
+                nickname = msg
+                nicknames.append(nickname)
+                broadcast(f"{nickname} has joined the chat!\n")
+                clients.append(conn)
+            else:
+                broadcast(msg)
             #thread = threading.Thread(target=handle, args=(conn,))
             #thread.start()
 
