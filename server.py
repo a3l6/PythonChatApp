@@ -79,6 +79,7 @@ def handle_conn(conn, addr):
             if msg == DISCONNECT_MESSAGE:
                     connected = False
                     #   Ugly code
+                    broadcast(f"{nickname} has left the chat!")
                     nicknames.pop(nickname.index(conn.recv(1024).decode(FORMAT)))
                     clients.pop(clients.index(conn))
                     break

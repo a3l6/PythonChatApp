@@ -6,8 +6,8 @@ import tkinter.scrolledtext
 import tkinter.simpledialog
 
 HEADER = 64
-PORT = 5050
-SERVER = "169.254.170.125"
+PORT = 5000
+SERVER = "140.238.138.95"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
 
