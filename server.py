@@ -2,7 +2,7 @@ import socket
 import threading
 
 HEADER = 64
-PORT = 5050
+PORT = 5000
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
@@ -18,47 +18,6 @@ nicknames = []
 def broadcast(message: str):
     for client in clients:
         client.send(message.encode(FORMAT))
-
-def handle(client):
-    while True:
-        try:
-            message = client.recv(1024)
-            broadcast(message)
-        except:
-            index = clients.index(client)
-            clients.remove(client)
-            client.close()
-            break
-"""
-def receive():
-    connected = True
-    while connected:
-        client, address = server.accept()
-        print(f"Connected with {str(address)}")
-
-
-        clients.send("NICK".encode(FORMAT))
-        nickname = client.recv(1024)
-        nicknames.append(nickname)
-
-        clients.append(client)
-
-        thread = threading.Thread(target=handle, args=(client,))
-        thread.start()
-
-
-"""
-
-
-
-
-
-
-
-
-
-
-
 
 def handle_conn(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected")

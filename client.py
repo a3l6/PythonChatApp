@@ -1,39 +1,54 @@
 import socket
 import threading
+import os
+import datetime
 
 import tkinter
 import tkinter.scrolledtext
 import tkinter.simpledialog
+import tkinter.messagebox
 
 HEADER = 64
 PORT = 5000
-SERVER = "140.238.138.95"
+SERVER = "169.254.170.125" #"140.238.138.95"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
 
 
 class Client:
     def __init__ (self, host, port):
-        self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn.connect((host, port))
+        try:
+            # Establish connection
+            self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.conn.connect((host, port))
 
-        self.run = True
+            self.run = True
 
-        msg = tkinter.Tk()
-        msg.withdraw()
+            # Draw new tkinter window
+            # Hide extra window created
+            window = tkinter.Tk()
+            window.withdraw()
 
-        self.name = tkinter.simpledialog.askstring("Nickname", "Please choose a name", parent=msg)
-        self.send(self.name)
-        
-        self.BG = "SKyBlue4"
+            self.name = tkinter.simpledialog.askstring("Nickname", "Please choose a name", parent=window)
+            self.send(self.name)
+            
+            self.BG = "SKyBlue4"
 
-        # Start multithreaded processes
-        self.GUIthread = threading.Thread(target=self.gui)
-        self.RECEIVEthread = threading.Thread(target=self.receiver)
-        
-        self.GUIthread.start()
-        self.RECEIVEthread.start()
-        
+            # Start multithreaded processes
+            self.GUIthread = threading.Thread(target=self.gui)
+            self.RECEIVEthread = threading.Thread(target=self.receiver)
+            
+            self.GUIthread.start()
+            self.RECEIVEthread.start()
+        except ConnectionRefusedError as e:
+            directory = os.getcwd()
+            date = datetime.date.today()
+            win = tkinter.Tk()
+            win.withdraw()
+            tkinter.messagebox.showerror("Error Occured", f"Could not connect to server, ensure server is started!\n\nLog File Created at {directory}\log-{date}!", master=win)
+            with open(f"log-{date}.txt", "w+") as f:
+                f.write(f"{str(e)}\n\nIs the server started?")
+            
 
     def gui(self):
         self.win = tkinter.Tk()
@@ -71,11 +86,13 @@ class Client:
         self.disconnect()
 
     def sendMessage(self):
-        if self.message_area.get('1.0', 'end') != "\n":
-            msg = f"{self.name}: {self.message_area.get('1.0', 'end')}"
-            self.send(msg)
-            self.message_area.delete("1.0", "end")
-
+        try:
+            if self.message_area.get('1.0', 'end') != "\n":
+                msg = f"{self.name}: {self.message_area.get('1.0', 'end')}"
+                self.send(msg)
+                self.message_area.delete("1.0", "end")
+        except ConnectionResetError as e:
+            tkinter.messagebox.showerror("Connection Reset", e)
 
     def receiver(self):
         while self.run:
@@ -85,7 +102,8 @@ class Client:
                 self.chat_area.insert("end", message)
                 self.chat_area.yview("end")
                 self.chat_area.config(state="disabled")
-            except ConnectionAbortedError:
+            except ConnectionAbortedError as e:
+                tkinter.messagebox.showerror("Conection aborted", e)
                 break
             except:
                 break
