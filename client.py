@@ -18,6 +18,17 @@ FORMAT = "utf-8"
 class Client:
     def __init__ (self, host, port):
         try:
+
+            #   Ask if want to connect to main server or to private server
+            tempwin = tkinter.Tk()
+            tempwin.withdraw()
+            host = tkinter.messagebox.askquestion("Title", "Would you like to connect to public server")
+            if host == "yes":
+                pass
+            else:
+                pass      
+
+
             # Establish connection
             self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.conn.connect((host, port))
@@ -27,7 +38,10 @@ class Client:
             # Draw new tkinter window
             # Hide extra window created
             window = tkinter.Tk()
+            window.iconbitmap("icon.ico")
             window.withdraw()
+
+
 
             self.name = tkinter.simpledialog.askstring("Nickname", "Please choose a name", parent=window)
             self.send(self.name)
@@ -40,10 +54,12 @@ class Client:
             
             self.GUIthread.start()
             self.RECEIVEthread.start()
+
         except ConnectionRefusedError as e:
             directory = os.getcwd()
             date = datetime.date.today()
             win = tkinter.Tk()
+            win.iconbitmap("icon.ico")
             win.withdraw()
             tkinter.messagebox.showerror("Error Occured", f"Could not connect to server, ensure server is started!\n\nLog File Created at {directory}\log-{date}!", master=win)
             with open(f"log-{date}.txt", "w+") as f:
@@ -53,6 +69,7 @@ class Client:
     def gui(self):
         self.win = tkinter.Tk()
         self.win.configure(bg=self.BG)
+        self.win.iconbitmap("icon.ico")
 
 
         self.chat_label = tkinter.Label(self.win, text="Anonymous Chat Room", bg=self.BG)
@@ -130,7 +147,4 @@ class Client:
 
 
 
-
 client = Client(SERVER, PORT)
-
-
