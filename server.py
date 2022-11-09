@@ -1,9 +1,15 @@
 import socket
 import threading
+import sys
+
 
 HEADER = 64
 PORT = 5000
-SERVER = socket.gethostbyname(socket.gethostname())
+ipaddr = sys.argv[1]
+if ipaddr == "local":
+    SERVER = socket.gethostbyname(socket.gethostname())
+else:
+    SERVER = ipaddr #socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
