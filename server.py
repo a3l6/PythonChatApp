@@ -7,7 +7,7 @@ HEADER = 64
 PORT = 5000
 ipaddr = sys.argv[1]
 if ipaddr == "local":
-    SERVER = socket.gethostbyname(socket.gethostname())
+    SERVER = socket.gethostbyname(socket.gethostname()) #hellooo
 else:
     SERVER = ipaddr #socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
