@@ -7,9 +7,11 @@ HEADER = 64
 PORT = 5000
 ipaddr = sys.argv[1]
 if ipaddr == "local":
-    SERVER = socket.gethostbyname(socket.gethostname()) #hellooo
+    SERVER = socket.gethostbyname(socket.gethostname())
 else:
-    SERVER = ipaddr #socket.gethostbyname(socket.gethostname())
+    SERVER = ipaddr
+
+
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
@@ -45,7 +47,7 @@ def handle_conn(conn, addr):
                     connected = False
                     #   Ugly code
                     broadcast(f"{nickname} has left the chat!")
-                    nicknames.pop(nickname.index(conn.recv(1024).decode(FORMAT)))
+                    nicknames.pop(nicknames.index(conn.recv(1024).decode(FORMAT)))
                     clients.pop(clients.index(conn))
                     break
             if nickname == None:
