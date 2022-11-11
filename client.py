@@ -2,6 +2,8 @@ import socket
 import threading
 import os
 import datetime
+import pickle
+import commons
 
 import tkinter
 import tkinter.scrolledtext
@@ -10,13 +12,13 @@ import tkinter.messagebox
 
 HEADER = 64
 PORT = 5000
-SERVER = "169.254.170.125" #"140.238.138.95"
+SERVER = "10.110.41.121" #"169.254.170.125" #"140.238.138.95"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
-
+MAINSERVER = commons.get_mainserver()
 
 class Client:
-    def __init__ (self, host, port):
+    def __init__ (self):
         try:
 
             #   Ask if want to connect to main server or to private server
@@ -24,15 +26,17 @@ class Client:
             tempwin.withdraw()
             host = tkinter.messagebox.askquestion("Title", "Would you like to connect to public server")
             if host == "yes":
-                pass
+                self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.conn.connect((MAINSERVER, PORT))
             else:
-                pass      
+                
+                self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.conn.connect(())
+      
 
 
             # Establish connection
-            self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.conn.connect((host, port))
-
+            
             self.run = True
 
             # Draw new tkinter window
@@ -54,6 +58,7 @@ class Client:
             
             self.GUIthread.start()
             self.RECEIVEthread.start()
+
         except ConnectionRefusedError as e:
             directory = os.getcwd()
             date = datetime.date.today()
@@ -146,4 +151,4 @@ class Client:
 
 
 
-client = Client(SERVER, PORT)
+client = Client()

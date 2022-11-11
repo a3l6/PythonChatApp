@@ -1,19 +1,40 @@
 import socket
 import threading
 import sys
-import requests 
+import commons
+
+def send(msg, conn):
+        message = msg.encode(FORMAT)    
+        msg_length = len(message)
+        send_length = str(msg_length).encode(FORMAT)
+        send_length += b" " * (HEADER - len(send_length))
+        conn.send(send_length)
+        conn.send(message)
+
+def disconnect(conn):
+        message = "!DISCONNECT".encode(FORMAT)    
+        msg_length = len(message)
+        send_length = str(msg_length).encode(FORMAT)
+        send_length += b" " * (HEADER - len(send_length))
+        conn.send(send_length)
+        conn.send(message)
+        conn.close()
 
 
 HEADER = 64
 PORT = 5000
-r = requests.get("https://raw.githubusercontent.com/Ironislife98/PythonChatApp/main/log-2022-11-09.txt")
 
-MAINSERVER = r.content
+MAINSERVER = commons.get_mainserver()
+
 ipaddr = sys.argv[1]
-if ipaddr == "local":
+if ipaddr == "-l":
     SERVER = socket.gethostbyname(socket.gethostname())
 else:
     SERVER = ipaddr
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind((SERVER, PORT))
+    send(SERVER, conn=sock)
+    disconnect(sock)
 
 
 ADDR = (SERVER, PORT)
@@ -61,11 +82,10 @@ def handle_conn(conn, addr):
                 clients.append(conn)
             else:
                 broadcast(msg)
-            #thread = threading.Thread(target=handle, args=(conn,))
-            #thread.start()
 
 
     conn.close()
+
 
 
 

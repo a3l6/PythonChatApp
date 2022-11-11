@@ -1,5 +1,6 @@
 import socket
 import threading
+import pickle
 
 HEADER = 64
 PORT = 5000
@@ -37,6 +38,11 @@ def handle_conn(conn, addr):
                 serverList.append(msg)
                 clients.append(conn)
                 ipaddr = msg
+            
+            if msg == "LIST":
+                conn.send(pickle.dumps(serverList))
+                print(f"Server list sent! : {serverList}")
+                print(f"Conn list: {clients}")
             
 
 
