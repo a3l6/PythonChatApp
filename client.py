@@ -18,7 +18,7 @@ FORMAT = "utf-8"
 class Client:
     def __init__ (self, host, port):
         try:
-
+            #hello world 123
             #   Ask if want to connect to main server or to private server
             tempwin = tkinter.Tk()
             tempwin.withdraw()
@@ -54,11 +54,7 @@ class Client:
             
             self.GUIthread.start()
             self.RECEIVEthread.start()
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> fa1ad80d5cb81b59f4852987868e85ed1cf4efb9
         except ConnectionRefusedError as e:
             directory = os.getcwd()
             date = datetime.date.today()
