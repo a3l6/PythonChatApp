@@ -1,5 +1,0 @@
-How Do I Want this to work?
-Flask app? Maybe
-Or 
-Run a socket server and connect to that using a tkinter interface?
-or PysimpleGUI or PyQT5
