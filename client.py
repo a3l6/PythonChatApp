@@ -54,11 +54,6 @@ class Client:
             
             self.GUIthread.start()
             self.RECEIVEthread.start()
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> fa1ad80d5cb81b59f4852987868e85ed1cf4efb9
         except ConnectionRefusedError as e:
             directory = os.getcwd()
             date = datetime.date.today()
