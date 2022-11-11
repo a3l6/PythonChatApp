@@ -23,20 +23,25 @@ class Client:
 
             #   Ask if want to connect to main server or to private server
             tempwin = tkinter.Tk()
-            tempwin.withdraw()
+            tempwin.withdraw() 
+            
+             # Establish connection
             host = tkinter.messagebox.askquestion("Title", "Would you like to connect to public server")
             if host == "yes":
                 self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.conn.connect((MAINSERVER, PORT))
             else:
-                
+                mainserverconn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                mainserverconn.connect((MAINSERVER))
+
+
+
                 self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.conn.connect(())
       
 
 
-            # Establish connection
-            
+          
             self.run = True
 
             # Draw new tkinter window

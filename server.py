@@ -4,22 +4,30 @@ import sys
 import commons
 
 def send(msg, conn):
-        message = msg.encode(FORMAT)    
-        msg_length = len(message)
-        send_length = str(msg_length).encode(FORMAT)
-        send_length += b" " * (HEADER - len(send_length))
-        conn.send(send_length)
-        conn.send(message)
+    message = msg.encode(FORMAT)    
+    msg_length = len(message)
+    send_length = str(msg_length).encode(FORMAT)
+    send_length += b" " * (HEADER - len(send_length))
+    conn.send(send_length)
+    conn.send(message)
 
 def disconnect(conn):
-        message = "!DISCONNECT".encode(FORMAT)    
-        msg_length = len(message)
-        send_length = str(msg_length).encode(FORMAT)
-        send_length += b" " * (HEADER - len(send_length))
-        conn.send(send_length)
-        conn.send(message)
-        conn.close()
+    message = "!DISCONNECT".encode(FORMAT)    
+    msg_length = len(message)
+    send_length = str(msg_length).encode(FORMAT)
+    send_length += b" " * (HEADER - len(send_length))
+    conn.send(send_length)
+    conn.send(message)
+    conn.close()
 
+def closeconn(conn):
+    message = "closeconn".encode(FORMAT)    
+    msg_length = len(message)
+    send_length = str(msg_length).encode(FORMAT)
+    send_length += b" " * (HEADER - len(send_length))
+    conn.send(send_length)
+    conn.send(message)
+    conn.close()
 
 HEADER = 64
 PORT = 5000
@@ -34,7 +42,7 @@ else:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((SERVER, PORT))
     send(SERVER, conn=sock)
-    disconnect(sock)
+    closeconn()
 
 
 ADDR = (SERVER, PORT)

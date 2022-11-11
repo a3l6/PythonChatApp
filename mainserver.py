@@ -33,6 +33,10 @@ def handle_conn(conn, addr):
                     serverList.pop(serverList.index(ipaddr))
                     clients.pop(clients.index(conn))
                     break
+            
+            if msg == "closeconn":
+                connected = False
+                break
 
             if ipaddr == None:
                 serverList.append(msg)
