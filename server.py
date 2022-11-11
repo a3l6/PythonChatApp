@@ -1,10 +1,14 @@
 import socket
 import threading
 import sys
+import requests 
 
 
 HEADER = 64
 PORT = 5000
+r = requests.get("https://raw.githubusercontent.com/Ironislife98/PythonChatApp/main/log-2022-11-09.txt")
+
+MAINSERVER = r.content
 ipaddr = sys.argv[1]
 if ipaddr == "local":
     SERVER = socket.gethostbyname(socket.gethostname())
