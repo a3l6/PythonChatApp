@@ -3,6 +3,14 @@ import threading
 import sys
 import commons
 
+HEADER = 64
+PORT = 5050
+MAINSERVER = commons.get_mainserver()
+
+FORMAT = "utf-8"
+DISCONNECT_MESSAGE = "!DISCONNECT"
+
+
 def send(msg, conn):
     message = msg.encode(FORMAT)    
     msg_length = len(message)
@@ -29,10 +37,7 @@ def closeconn(conn):
     conn.send(message)
     conn.close()
 
-HEADER = 64
-PORT = 5000
 
-MAINSERVER = commons.get_mainserver()
 
 ipaddr = sys.argv[1]
 if ipaddr == "-l":
@@ -46,8 +51,6 @@ else:
 
 
 ADDR = (SERVER, PORT)
-FORMAT = "utf-8"
-DISCONNECT_MESSAGE = "!DISCONNECT"
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
@@ -93,7 +96,6 @@ def handle_conn(conn, addr):
 
 
     conn.close()
-
 
 
 

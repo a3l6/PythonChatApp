@@ -42,6 +42,9 @@ def handle_conn(conn, addr):
                 serverList.append(msg)
                 clients.append(conn)
                 ipaddr = msg
+                print(serverList)
+                print()
+                print(clients)
             
             if msg == "LIST":
                 conn.send(pickle.dumps(serverList))
