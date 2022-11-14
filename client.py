@@ -12,7 +12,7 @@ import tkinter.messagebox
 
 HEADER = 64
 PORT = 5000
-SERVER = "169.254.170.125" #"132.145.100.9"
+SERVER = "172.18.0.98" #"132.145.100.9"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
 #MAINSERVER = commons.get_mainserver()[2:-1]
