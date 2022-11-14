@@ -12,18 +12,18 @@ import tkinter.messagebox
 
 HEADER = 64
 PORT = 5000
-SERVER = "132.145.100.9" #"169.254.170.125" #"140.238.138.95"
+SERVER = "169.254.170.125" #"132.145.100.9"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
-MAINSERVER = commons.get_mainserver()[2:-1]
-print(MAINSERVER)
+#MAINSERVER = commons.get_mainserver()[2:-1]
+#print(MAINSERVER)
 
 class Client:
-    def __init__ (self):
+    def __init__ (self, host, port):
         try:
 
             #   Ask if want to connect to main server or to private server
-            tempwin = tkinter.Tk()
+            """tempwin = tkinter.Tk()
             tempwin.withdraw() 
             
              # Establish connection
@@ -34,13 +34,13 @@ class Client:
                 self.conn.connect((MAINSERVER, PORT))
             else:
                 mainserverconn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                mainserverconn.connect((MAINSERVER))
+                mainserverconn.connect((MAINSERVER))"""
 
 
-
-                """self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.conn.connect(())"""
-      
+            print("start conn")
+            self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.conn.connect((host, port))
+            print("end conn")
 
 
           
@@ -158,4 +158,4 @@ class Client:
 
 
 
-client = Client()
+client = Client(SERVER, PORT)
