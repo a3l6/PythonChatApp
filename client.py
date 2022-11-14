@@ -15,15 +15,15 @@ PORT = 5000
 SERVER = "172.18.0.98" #"132.145.100.9"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
-#MAINSERVER = commons.get_mainserver()[2:-1]
-#print(MAINSERVER)
+MAINSERVER = commons.get_mainserver()[2:-1]
+print(MAINSERVER)
 
 class Client:
     def __init__ (self, host, port):
         try:
 
             #   Ask if want to connect to main server or to private server
-            """tempwin = tkinter.Tk()
+            tempwin = tkinter.Tk()
             tempwin.withdraw() 
             
              # Establish connection
@@ -34,7 +34,7 @@ class Client:
                 self.conn.connect((MAINSERVER, PORT))
             else:
                 mainserverconn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                mainserverconn.connect((MAINSERVER))"""
+                mainserverconn.connect((MAINSERVER))
 
 
             print("start conn")
