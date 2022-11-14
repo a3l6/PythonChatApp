@@ -4,6 +4,7 @@ import os
 import datetime
 import pickle
 import commons
+import requests
 
 import tkinter
 import tkinter.scrolledtext
@@ -15,7 +16,7 @@ PORT = 5000
 SERVER = "172.18.0.98" #"132.145.100.9"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
-MAINSERVER = commons.get_mainserver()[2:-1]
+MAINSERVER = "https://pythonsockets.ironislife98.repl.co"#commons.get_mainserver()[2:-1]
 print(MAINSERVER)
 
 class Client:
@@ -30,11 +31,13 @@ class Client:
             host = tkinter.messagebox.askquestion("CONNECTION", "Would you like to connect to public server")
             if host == "yes":
                 print("yes")
-                self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.conn.connect((MAINSERVER, PORT))
+                req = requests.get(f"{MAINSERVER}/api/")
             else:
-                mainserverconn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                mainserverconn.connect((MAINSERVER))
+                req = requests.get(f"{MAINSERVER}/api/gethosts")
+                print(str(req.content)[3:-1].encode(FORMAT))
+                req = pickle.loads(str(req.content)[3:-1].encode(FORMAT))
+                print(req)
+                exit()
 
 
             print("start conn")
