@@ -20,19 +20,23 @@ PORT = 5000
 SERVER = "" #"132.145.100.9"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
-MAINSERVER = commons.get_mainserver()[2:-1]
+MAINSERVER = commons.get_mainserver()
 
 class Client:
     def __init__ (self, host, port):
         try:
+            
+            self.theme = "superhero"
 
             #   Ask if want to connect to main server or to private server
             tempwin = tkinter.Tk()
             tempwin.withdraw() 
             
+
              # Establish connection
             host = tkinter.messagebox.askquestion("CONNECTION", "Would you like to connect to public server")
-            if host == "yes":
+            
+            if host == "yes":   # I dont know how to do this yet
                 print("yes")
                 req = requests.get(f"{MAINSERVER}/api/")
             else:
@@ -55,6 +59,8 @@ class Client:
                     win.withdraw()
                     tkinter.messagebox.showerror("No Servers Online", f"No servers appear to be online and registered with the mainserver.\nPlease relaunch the application!", master=win)
                     self.stop()
+                else:   # Display window to choose server
+                    self.popupList(servers=req)
 
 
 
@@ -94,10 +100,23 @@ class Client:
             tkinter.messagebox.showerror("Error Occured", f"Could not connect to server, ensure server is started!\n\nLog File Created at {directory}\log-{date}!", master=win)
             with open(f"log-{date}.txt", "w+") as f:
                 f.write(f"{str(e)}\n\nIs the server started?")
-            
+
+    def popupList(self, servers):
+        win = ttk.Toplevel(title="Choose Server", resizable=(False, False))
+        win.geometry("500x500")
+
+
+        servers = tkinter.Variable(value=servers)
+
+        listbox = tkinter.Listbox(win, listvariable=servers, height=6, selectmode=tkinter.EXTENDED)
+        listbox.pack(side='top')
+
+        b = ttk.Button(win, text="Okay", command=win.destroy)
+        b.pack(side='top')
+        win.mainloop()
 
     def gui(self):
-        self.win = ttk.Window(themename="vapor")
+        self.win = ttk.Window(themename=self.theme)
         self.win.iconbitmap("icon.ico")
 
         self.chat_label = ttk.Label(self.win, text="Anonymous Chat Room")

@@ -2,6 +2,8 @@ import socket
 import threading
 import sys
 import commons
+import requests
+import pickle
 
 HEADER = 64
 PORT = 5000
@@ -11,49 +13,42 @@ FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
 
 
-def send(msg, conn):
-    message = msg.encode(FORMAT)    
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
-    send_length += b" " * (HEADER - len(send_length))
-    conn.send(send_length)
-    conn.send(message)
+def register():
+    myip = commons.getIP()
+    req = requests.get(f"{MAINSERVER}/api/addserver/{myip}").content        # Add server and get content of returned html page
+    req = req.decode("unicode_escape").encode("raw_unicode_escape")
+    req = pickle.loads(req)
+    if str(req) == "Added":
+        print(f"Added server with addr: {myip}")
+    else:
+        print(req)
+        exit()
 
-def disconnect(conn):
-    message = "!DISCONNECT".encode(FORMAT)    
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
-    send_length += b" " * (HEADER - len(send_length))
-    conn.send(send_length)
-    conn.send(message)
-    conn.close()
-
-def closeconn(conn):
-    message = "closeconn".encode(FORMAT)    
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
-    send_length += b" " * (HEADER - len(send_length))
-    conn.send(send_length)
-    conn.send(message)
-    conn.close()
-
+def disconnect():
+    myip = commons.getIP()
+    req = requests.get(f"{MAINSERVER}/api/deleteserver/{myip}")
+    print(req.content)      # Wont even bother to remove backslashes again
+    exit()
 
 
 ipaddr = sys.argv[1]
 if ipaddr == "-l":
     SERVER = socket.gethostbyname(socket.gethostname())
+elif ipaddr == "-h":
+    SERVER = ""
+elif ipaddr == "-d":
+    disconnect()
 else:
-    SERVER = ipaddr
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind((SERVER, PORT))
-    send(SERVER, conn=sock)
-    closeconn()
+    print("Not valid arguement")
+    exit()
 
+register()
 
 ADDR = (SERVER, PORT)
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
+
 
 
 clients = []
