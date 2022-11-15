@@ -11,9 +11,13 @@ import tkinter.scrolledtext
 import tkinter.simpledialog
 import tkinter.messagebox
 
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+
+
 HEADER = 64
 PORT = 5000
-SERVER = "172.18.0.98" #"132.145.100.9"
+SERVER = "169.254.170.125" #"132.145.100.9"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
 MAINSERVER = "https://pythonsockets.ironislife98.repl.co"#commons.get_mainserver()[2:-1]
@@ -26,7 +30,7 @@ class Client:
             #   Ask if want to connect to main server or to private server
             tempwin = tkinter.Tk()
             tempwin.withdraw() 
-            
+            """
              # Establish connection
             host = tkinter.messagebox.askquestion("CONNECTION", "Would you like to connect to public server")
             if host == "yes":
@@ -37,13 +41,11 @@ class Client:
                 print(str(req.content)[3:-1].encode(FORMAT))
                 req = pickle.loads(str(req.content)[3:-1].encode(FORMAT))
                 print(req)
-                exit()
+                exit()"""
 
 
-            print("start conn")
             self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.conn.connect((host, port))
-            print("end conn")
 
 
           
@@ -60,14 +62,14 @@ class Client:
             self.name = tkinter.simpledialog.askstring("Nickname", "Please choose a name", parent=window)
             self.send(self.name)
             
-            self.BG = "SKyBlue4"
-
             # Start multithreaded processes
-            self.GUIthread = threading.Thread(target=self.gui)
+            #self.GUIthread = threading.Thread(target=self.gui)
             self.RECEIVEthread = threading.Thread(target=self.receiver)
             
-            self.GUIthread.start()
+            #self.GUIthread.start()
             self.RECEIVEthread.start()
+
+            self.gui()
 
         except ConnectionRefusedError as e:
             directory = os.getcwd()
@@ -81,34 +83,33 @@ class Client:
             
 
     def gui(self):
-        self.win = tkinter.Tk()
-        self.win.configure(bg=self.BG)
+        self.win = ttk.Window(themename="vapor")
         self.win.iconbitmap("icon.ico")
 
-
-        self.chat_label = tkinter.Label(self.win, text="Anonymous Chat Room", bg=self.BG)
+        self.chat_label = ttk.Label(self.win, text="Anonymous Chat Room")
         self.chat_label.config(font=("Arial", 12))
         self.chat_label.pack(padx=20, pady=5)
 
 
         self.chat_area = tkinter.scrolledtext.ScrolledText(self.win)
         self.chat_area.config(state="normal")
-        self.chat_area.insert("end", f"Welcome  to the chat room, {self.name}!\n")
+        self.chat_area.insert("end", f"Welcome  to the chat room, EMilio!\n")
         self.chat_area.yview("end")
         self.chat_area.pack(padx=20, pady=5)
         self.chat_area.config(state="disabled")
 
-        self.message_area = tkinter.Text(self.win, height=3)
+        self.message_area = ttk.Text(self.win, height=3)
         self.message_area.pack(padx=20, pady=5)
 
-        self.send_button = tkinter.Button(self.win, text="Send", command=self.sendMessage)
-        self.send_button.config(font=("Arial", 12))
+        self.send_button = ttk.Button(self.win, text="Send", command=self.sendMessage)
+        #self.send_button.config(font=("Arial", 12))
         self.send_button.pack(padx=20, pady=5)
 
 
         self.win.protocol("WM_DELETE_WINDOW", self.stop)
 
         self.win.mainloop()
+
 
 
     def stop(self):

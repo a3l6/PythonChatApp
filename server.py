@@ -4,7 +4,7 @@ import sys
 import commons
 
 HEADER = 64
-PORT = 5050
+PORT = 5000
 MAINSERVER = commons.get_mainserver()
 
 FORMAT = "utf-8"
