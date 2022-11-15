@@ -17,11 +17,10 @@ from ttkbootstrap.constants import *
 
 HEADER = 64
 PORT = 5000
-SERVER = "169.254.170.125" #"132.145.100.9"
+SERVER = "" #"132.145.100.9"
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
-MAINSERVER = "https://pythonsockets.ironislife98.repl.co"#commons.get_mainserver()[2:-1]
-print(MAINSERVER)
+MAINSERVER = commons.get_mainserver()[2:-1]
 
 class Client:
     def __init__ (self, host, port):
@@ -30,18 +29,33 @@ class Client:
             #   Ask if want to connect to main server or to private server
             tempwin = tkinter.Tk()
             tempwin.withdraw() 
-            """
+            
              # Establish connection
             host = tkinter.messagebox.askquestion("CONNECTION", "Would you like to connect to public server")
             if host == "yes":
                 print("yes")
                 req = requests.get(f"{MAINSERVER}/api/")
             else:
-                req = requests.get(f"{MAINSERVER}/api/gethosts")
-                print(str(req.content)[3:-1].encode(FORMAT))
-                req = pickle.loads(str(req.content)[3:-1].encode(FORMAT))
-                print(req)
-                exit()"""
+                req = requests.get(f"{MAINSERVER}/api/gethosts").content        # Don't want the rest of the object, just the content of the page
+
+                """
+                Stackoverflow explanation: 
+                https://stackoverflow.com/questions/38763771/how-do-i-remove-double-back-slash-from-a-bytes-object
+
+                My Explation:
+                Either flask or requests escapes characters to avoid potential issues. I dont want these escape characters. First decode 
+                bytes object req then encode it without escaping characters
+                """
+
+                req = req.decode("unicode_escape").encode("raw_unicode_escape")
+                req = pickle.loads(req)
+                if req == []:       # If no servers have joined network, show error
+                    win = tkinter.Tk()
+                    win.iconbitmap("icon.ico")
+                    win.withdraw()
+                    tkinter.messagebox.showerror("No Servers Online", f"No servers appear to be online and registered with the mainserver.\nPlease relaunch the application!", master=win)
+                    self.stop()
+
 
 
             self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -113,9 +127,13 @@ class Client:
 
 
     def stop(self):
-        self.run = False
-        self.win.destroy()
-        self.disconnect()
+        try:
+            self.run = False
+            self.win.destroy()
+            self.disconnect()
+        except AttributeError:
+            print("Client exited before joining room")
+            exit()
 
     def sendMessage(self):
         try:
