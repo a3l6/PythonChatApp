@@ -27,6 +27,24 @@ Start the server
   python server.py -l
 ```
 
+## Usage 
+🚀🚀Run server locally
+``` bash
+  python server.py -l
+```
+🚀🚀Run public server
+``` bash
+  python server.py -h
+```
+Delete server from public server
+``` bash
+python server.py -d
+```
+
+## ⚠️WARNING⚠️
+When server runs with flag -h, your public ip address is broadcast to everyone, make sure you want this!
+
+
 
 ## Authors
 
