@@ -25,7 +25,8 @@ MAINSERVER = commons.get_mainserver()
 class Client:
     def __init__ (self, host, port):
         try:
-            
+            self.connectionip = host 
+
             self.theme = "superhero"
 
             #   Ask if want to connect to main server or to private server
@@ -60,12 +61,11 @@ class Client:
                     tkinter.messagebox.showerror("No Servers Online", f"No servers appear to be online and registered with the mainserver.\nPlease relaunch the application!", master=win)
                     self.stop()
                 else:   # Display window to choose server
-                    self.popupList(servers=req)
+                    self.popupList(servers=req) # Blocks execution until server is chosen
 
-
-
+            
             self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.conn.connect((host, port))
+            self.conn.connect((self.connectionip, port))
 
 
           
@@ -76,9 +76,7 @@ class Client:
             window = tkinter.Tk()
             window.iconbitmap("icon.ico")
             window.withdraw()
-
-
-
+            
             self.name = tkinter.simpledialog.askstring("Nickname", "Please choose a name", parent=window)
             self.send(self.name)
             
@@ -101,9 +99,15 @@ class Client:
             with open(f"log-{date}.txt", "w+") as f:
                 f.write(f"{str(e)}\n\nIs the server started?")
 
+    #   Handling Connection + selection of servers that are registered with mainserver
+    def connect(self, listboxvar, win):
+        for i in listboxvar.curselection():
+            self.connectionip = listboxvar.get(i)
+        win.quit()
+
     def popupList(self, servers):
         win = ttk.Toplevel(title="Choose Server", resizable=(False, False))
-        win.geometry("500x500")
+        win.geometry("200x200")
 
 
         servers = tkinter.Variable(value=servers)
@@ -111,10 +115,13 @@ class Client:
         listbox = tkinter.Listbox(win, listvariable=servers, height=6, selectmode=tkinter.EXTENDED)
         listbox.pack(side='top')
 
-        b = ttk.Button(win, text="Okay", command=win.destroy)
+        b = ttk.Button(win, text="Okay", command=lambda: self.connect(listbox, win))
         b.pack(side='top')
         win.mainloop()
 
+
+
+    # Main GUI using ttkbootstrap
     def gui(self):
         self.win = ttk.Window(themename=self.theme)
         self.win.iconbitmap("icon.ico")
