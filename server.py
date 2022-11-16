@@ -15,7 +15,8 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 
 def register():
     myip = commons.getIP()
-    req = requests.get(f"{MAINSERVER}/api/addserver/{myip}").content        # Add server and get content of returned html page
+    #req = requests.get(f"{MAINSERVER}/api/addserver/{myip}").content        # Add server and get content of returned html page
+    req = requests.get(f"{MAINSERVER}/api/addserver/10.110.41.121").content 
     req = req.decode("unicode_escape").encode("raw_unicode_escape")
     req = pickle.loads(req)
     if str(req) == "Added":

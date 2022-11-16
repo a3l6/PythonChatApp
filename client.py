@@ -87,6 +87,7 @@ class Client:
             self.RECEIVEthread.start()
 
             self.gui()
+
         except ConnectionRefusedError as e:
             directory = os.getcwd()
             date = datetime.date.today()
@@ -131,7 +132,7 @@ class Client:
 
         self.chat_area = tkinter.scrolledtext.ScrolledText(self.win)
         self.chat_area.config(state="normal")
-        self.chat_area.insert("end", f"Welcome  to the chat room, EMilio!\n")
+        self.chat_area.insert("end", f"Welcome  to the chat room, {self.name}!\n")
         self.chat_area.yview("end")
         self.chat_area.pack(padx=20, pady=5)
         self.chat_area.config(state="disabled")
