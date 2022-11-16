@@ -28,7 +28,6 @@ class Client:
             self.connectionip = host 
 
             self.theme = "superhero"
-
             #   Ask if want to connect to main server or to private server
             tempwin = tkinter.Tk()
             tempwin.withdraw() 
@@ -88,7 +87,6 @@ class Client:
             self.RECEIVEthread.start()
 
             self.gui()
-
         except ConnectionRefusedError as e:
             directory = os.getcwd()
             date = datetime.date.today()
