@@ -36,7 +36,7 @@ Start the server
 ``` bash
   python server.py -h
 ```
-Delete server from public server
+⛔Delete server from public server
 ``` bash
 python server.py -d
 ```
