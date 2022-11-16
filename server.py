@@ -1,21 +1,54 @@
 import socket
 import threading
 import sys
-
+import commons
+import requests
+import pickle
 
 HEADER = 64
 PORT = 5000
-ipaddr = sys.argv[1]
-if ipaddr == "local":
-    SERVER = socket.gethostbyname(socket.gethostname())
-else:
-    SERVER = ipaddr #socket.gethostbyname(socket.gethostname())
-ADDR = (SERVER, PORT)
+MAINSERVER = commons.get_mainserver()
+
 FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
 
+
+def register():
+    myip = commons.getIP()
+    req = requests.get(f"{MAINSERVER}/api/addserver/{myip}").content        # Add server and get content of returned html page
+    req = req.decode("unicode_escape").encode("raw_unicode_escape")
+    req = pickle.loads(req)
+    if str(req) == "Added":
+        print(f"Added server with addr: {myip}")
+    else:
+        print(req)
+        exit()
+
+def disconnect():
+    myip = commons.getIP()
+    req = requests.get(f"{MAINSERVER}/api/deleteserver/{myip}")
+    print(req.content)      # Wont even bother to remove backslashes again
+    exit()
+
+
+ipaddr = sys.argv[1]
+if ipaddr == "-l":
+    SERVER = socket.gethostbyname(socket.gethostname())
+elif ipaddr == "-h":
+    SERVER = ""
+elif ipaddr == "-d":
+    disconnect()
+else:
+    print("Not valid arguement")
+    exit()
+
+register()
+
+ADDR = (SERVER, PORT)
+
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
+
 
 
 clients = []
@@ -45,7 +78,7 @@ def handle_conn(conn, addr):
                     connected = False
                     #   Ugly code
                     broadcast(f"{nickname} has left the chat!")
-                    nicknames.pop(nickname.index(conn.recv(1024).decode(FORMAT)))
+                    nicknames.pop(nicknames.index(conn.recv(1024).decode(FORMAT)))
                     clients.pop(clients.index(conn))
                     break
             if nickname == None:
@@ -55,8 +88,6 @@ def handle_conn(conn, addr):
                 clients.append(conn)
             else:
                 broadcast(msg)
-            #thread = threading.Thread(target=handle, args=(conn,))
-            #thread.start()
 
 
     conn.close()
