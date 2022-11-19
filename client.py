@@ -142,7 +142,6 @@ class Client:
         self.message_area.pack(padx=20, pady=5)
 
         self.send_button = ttk.Button(self.win, text="Send", command=self.sendMessage)
-        #self.send_button.config(font=("Arial", 12))
         self.send_button.pack(padx=20, pady=5)
 
 

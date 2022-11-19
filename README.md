@@ -5,7 +5,10 @@
 ![Last Commit](https://img.shields.io/github/last-commit/Ironislife98/PythonChatApp?style=for-the-badge)
 
 A simple python powered chat application with connectivity support to make self hosted servers
-or connect to the main server.
+or connect to the main server. It is sugested to use Linode's "nanode" service since it is the only one I could get working. Using sockets means port forwarding, but linode just worked. 
+
+
+I will not be updating this project after this, except for some very small stuff. Have fun if you want to use this code!
 
 ## Run Locally
 
@@ -28,11 +31,8 @@ Start the server
 ```
 
 ## Usage 
-🚀Run server locally
-``` bash
-  python server.py -l
-```
-🚀🚀Run public server
+
+🚀🚀Run public server (Use linode)
 ``` bash
   python server.py -h
 ```
