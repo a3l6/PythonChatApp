@@ -91,6 +91,11 @@ def handle_conn(conn, addr):
                     broadcast(msg)
         except ConnectionResetError:
             print(f"{addr} did not exit cleanly")
+            connected = False
+            #   Ugly code
+            broadcast(f"{nickname} has left the chat!")
+            nicknames.pop(nicknames.index(conn.recv(1024).decode(FORMAT)))
+            clients.pop(clients.index(conn))
             conn.close()
             break
 
