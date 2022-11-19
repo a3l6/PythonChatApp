@@ -47,6 +47,7 @@ When server runs with flag -h, your public ip address is broadcast to everyone, 
 
 ## Bugs
 - Cannot connect again once disconnected
+- Server throws broken pipe error
 
 
 ## Authors
