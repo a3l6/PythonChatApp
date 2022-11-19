@@ -56,7 +56,7 @@ class Client:
                 req = pickle.loads(req)
                 if req == []:       # If no servers have joined network, show error
                     win = tkinter.Tk()
-                    win.iconbitmap("icon.ico")
+                    #win.iconbitmap("icon.ico")
                     win.withdraw()
                     tkinter.messagebox.showerror("No Servers Online", f"No servers appear to be online and registered with the mainserver.\nPlease relaunch the application!", master=win)
                     self.stop()
@@ -74,7 +74,7 @@ class Client:
             # Draw new tkinter window
             # Hide extra window created
             window = tkinter.Tk()
-            window.iconbitmap("icon.ico")
+            #window.iconbitmap("icon.ico")
             window.withdraw()
             
             self.name = tkinter.simpledialog.askstring("Nickname", "Please choose a name", parent=window)
@@ -93,7 +93,7 @@ class Client:
             directory = os.getcwd()
             date = datetime.date.today()
             win = tkinter.Tk()
-            win.iconbitmap("icon.ico")
+            #win.iconbitmap("icon.ico")
             win.withdraw()
             tkinter.messagebox.showerror("Error Occured", f"Could not connect to server, ensure server is started!\n\nLog File Created at {directory}\log-{date}!", master=win)
             with open(f"log-{date}.txt", "w+") as f:
@@ -124,7 +124,7 @@ class Client:
     # Main GUI using ttkbootstrap
     def gui(self):
         self.win = ttk.Window(themename=self.theme)
-        self.win.iconbitmap("icon.ico")
+        #self.win.iconbitmap("icon.ico")
 
         self.chat_label = ttk.Label(self.win, text="Anonymous Chat Room")
         self.chat_label.config(font=("Arial", 12))
