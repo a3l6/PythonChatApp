@@ -36,9 +36,10 @@ class Client:
              # Establish connection
             host = tkinter.messagebox.askquestion("CONNECTION", "Would you like to connect to public server")
             
-            if host == "yes":   # I dont know how to do this yet
-                print("yes")
-                req = requests.get(f"{MAINSERVER}/api/")
+            if host == "yes":   # I won't be running mainserver
+                nomainserver = tkinter.messagebox.showerror("Could not connect to mainserver", "Could not connect to mainserver!\nPlease select a hosted server")
+                exit()
+               
             else:
                 req = requests.get(f"{MAINSERVER}/api/gethosts").content        # Don't want the rest of the object, just the content of the page
 
@@ -61,10 +62,10 @@ class Client:
                     self.stop()
                 else:   # Display window to choose server
                     self.popupList(servers=req) # Blocks execution until server is chosen
-
+            
             
             self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.conn.connect((self.connectionip, port))
+            self.conn.connect(("139.144.110.244", port))
 
 
           
@@ -132,7 +133,7 @@ class Client:
 
         self.chat_area = tkinter.scrolledtext.ScrolledText(self.win)
         self.chat_area.config(state="normal")
-        self.chat_area.insert("end", f"Welcome  to the chat room, {self.name}!\n")
+        self.chat_area.insert("end", f"Welcome to the chat room, {self.name}!\n")
         self.chat_area.yview("end")
         self.chat_area.pack(padx=20, pady=5)
         self.chat_area.config(state="disabled")
@@ -189,7 +190,6 @@ class Client:
         send_length = str(msg_length).encode(FORMAT)
         send_length += b" " * (HEADER - len(send_length))
         self.conn.send(send_length)
-        #print(client.recv(1))
         self.conn.send(message)
 
 

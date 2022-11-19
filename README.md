@@ -28,7 +28,7 @@ Start the server
 ```
 
 ## Usage 
-🚀🚀Run server locally
+🚀Run server locally
 ``` bash
   python server.py -l
 ```
@@ -44,6 +44,9 @@ python server.py -d
 ## ⚠️WARNING⚠️
 When server runs with flag -h, your public ip address is broadcast to everyone, make sure you want this!
 
+
+## Bugs
+- Cannot connect again once disconnected
 
 
 ## Authors
