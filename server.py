@@ -64,32 +64,35 @@ def handle_conn(conn, addr):
     nickname = None
     connected = True
     while connected:
-        
+        try: 
 
-        #   Get HEADER
-        msg_length = conn.recv(HEADER).decode(FORMAT)
-        if msg_length:
-                
-            msg_length = int(msg_length)
+            #   Get HEADER
+            msg_length = conn.recv(HEADER).decode(FORMAT)
+            if msg_length:
+                    
+                msg_length = int(msg_length)
 
-            #   Recieve message with length
-            msg = conn.recv(msg_length).decode(FORMAT)
+                #   Recieve message with length
+                msg = conn.recv(msg_length).decode(FORMAT)
 
-            if msg == DISCONNECT_MESSAGE:
-                    connected = False
-                    #   Ugly code
-                    broadcast(f"{nickname} has left the chat!")
-                    nicknames.pop(nicknames.index(conn.recv(1024).decode(FORMAT)))
-                    clients.pop(clients.index(conn))
-                    break
-            if nickname == None:
-                nickname = msg
-                nicknames.append(nickname)
-                broadcast(f"{nickname} has joined the chat!\n")
-                clients.append(conn)
-            else:
-                broadcast(msg)
-
+                if msg == DISCONNECT_MESSAGE:
+                        connected = False
+                        #   Ugly code
+                        broadcast(f"{nickname} has left the chat!")
+                        nicknames.pop(nicknames.index(conn.recv(1024).decode(FORMAT)))
+                        clients.pop(clients.index(conn))
+                        break
+                if nickname == None:
+                    nickname = msg
+                    nicknames.append(nickname)
+                    broadcast(f"{nickname} has joined the chat!\n")
+                    clients.append(conn)
+                else:
+                    broadcast(msg)
+        except ConnectionResetError:
+            print(f"{addr} did not exit cleanly")
+            conn.close()
+            break
 
     conn.close()
 

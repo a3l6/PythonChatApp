@@ -17,7 +17,7 @@ from ttkbootstrap.constants import *
 
 HEADER = 64
 PORT = 5000
-SERVER = "" #"132.145.100.9"
+SERVER = ""
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
 MAINSERVER = commons.get_mainserver()
@@ -65,7 +65,7 @@ class Client:
             
             
             self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.conn.connect(("139.144.110.244", port))
+            self.conn.connect((self.connectionip, port))
 
 
           
